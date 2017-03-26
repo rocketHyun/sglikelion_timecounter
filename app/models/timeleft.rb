@@ -1,0 +1,2 @@
+class Timeleft < ApplicationRecord
+end

@@ -1,0 +1,84 @@
+<h1>Countdown Clock</h1>
+<div id="clockdiv">
+  <div>
+    <span class="seconds"></span>
+    <div class="smalltext">남은 시간(초)</div>
+  </div>
+</div>
+<br /><br />
+
+
+<!-- 찬하가 할 부분 -->
+<!-- 통과 또는 정답을 눌러서 이 화면으로 다시 돌아올때마다 -->
+<!-- 랜덤으로 단어가 나오도록 만들어주셈 -->
+<!-- 조건: 이미 맞춘 단어는 나오지 않게 -->
+<!-- 팀별 중복 가능 -->
+<h1>이 부분에 랜덤 단어가 나오도록</h1>
+
+
+
+<br /><br />
+<h3>현재 정답 : <%= @teamdata %>개</h3>
+<br /><br />
+<!-- 정답 버튼 -->
+<form action="/home/correct" method="post">
+  <!-- hidden input안에 남은 값이 들어간다. -->
+  <!-- 아래보면 jquery 구문 있음 -->
+  <input type="hidden" class="timeLeft" name="timeLeft" value="">
+  <button type="submit">정답!!</button>
+</form>
+
+
+<!-- 통과버튼 -->
+<form action="/home/pass" method="post">
+  <!-- hidden input안에 남은 값이 들어간다. -->
+  <!-- 아래보면 jquery 구문 있음 -->
+  <input type="hidden" class="timeLeft" name="timeLeft" value="">
+  <button type="submit">통과!!</button>
+</form>
+
+<br /><br />
+<%= link_to "끝!", "/home/finish" %>
+
+
+
+
+<!-- 다 안 봐도 됨. 걍 밑에 주석친 부분만 보셈 -->
+<script>
+function getTimeRemaining(endtime) {
+  var t = Date.parse(endtime) - Date.parse(new Date());
+  var seconds = Math.floor((t / 1000) % 60);
+  return {
+    'total': t,
+    'seconds': seconds
+  };
+}
+
+function initializeClock(id, endtime) {
+  var clock = document.getElementById(id);
+  var secondsSpan = clock.querySelector('.seconds');
+
+  function updateClock() {
+    var t = getTimeRemaining(endtime);
+
+    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+    };
+
+    //이 부분이 .timeLeft 클래스 input에
+    // .seconds 클래스 <span></span> 안에있는 text값 (=남은 시간)을
+    // 넣어주는 부분
+    $('.timeLeft').val($(".seconds").text());
+  }
+
+  updateClock();
+  var timeinterval = setInterval(updateClock, 1000);
+}
+
+// 루비코드로 된부분이 남은 시간을 나타낸다.
+var deadline = new Date(Date.parse(new Date()) + <%= @time %> * 1000);
+initializeClock('clockdiv', deadline);
+
+</script>
