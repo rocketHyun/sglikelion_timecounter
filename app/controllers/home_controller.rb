@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
-
+  
+  
   def teamselect
   end
 
@@ -27,6 +28,13 @@ class HomeController < ApplicationController
     # 감안하기 위해 남은 시간에서 2초를 빼준다.
     # 대신 처음엔 60초에서 뺄 필요 없으니까
     # if 문으로 막아준다.
+    if Quiz.where(isshown: false).count > 0
+      @choice=Quiz.where(isshown: false).all.sample()
+      @@isshown=@choice.id
+    else
+      @choice=Quiz.create(id: Quiz.last.id + 1,content: "끝났습니다")
+    end
+    
     if Timeleft.last.time == 60
       @time = Timeleft.last.time
     else
@@ -40,17 +48,29 @@ class HomeController < ApplicationController
 
 # 정답!을 눌렀을때 도달하는 액션
   def correct
-
+    if Quiz.where(isshown: false).count > 0
+      @choice_id=@@isshown
+      Quiz.where(id: @choice_id).update(isshown: true)  
+  
       # 팀선택 할때 만들었던 데이터를 가져온다.
       @time = Timeleft.last
       # hidden input에 담긴 value를 남은시간으로 저장한다.
       @time.time = params[:timeLeft]
       # 맞췄으니 correct +1을 해준다.
       @time.correct += 1
-      @time. save
+      @time.save
       # 다시 카운트하러 돌아가야지!
       redirect_to "/home/index"
-
+    else
+      @time = Timeleft.last
+      # hidden input에 담긴 value를 남은시간으로 저장한다.
+      @time.time = params[:timeLeft]
+      # 맞췄으니 correct +1을 해준다.
+  
+      @time.save
+      redirect_to "/home/index"
+    end
+    
   end
 
 # 통과!를 눌렀을때 도달하는 액션
@@ -61,7 +81,7 @@ class HomeController < ApplicationController
     @time.time = params[:timeLeft]
 
     # 여기선 통과를 했으니 correct를 건드릴 필요가 없다.
-    @time. save
+    @time.save
     redirect_to "/home/index"
 
   end

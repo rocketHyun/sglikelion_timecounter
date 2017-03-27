@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326130933) do
+ActiveRecord::Schema.define(version: 20170327055010) do
+
+  create_table "quizzes", force: :cascade do |t|
+    t.boolean  "isshown",    default: false
+    t.string   "content"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "timelefts", force: :cascade do |t|
     t.integer  "team"

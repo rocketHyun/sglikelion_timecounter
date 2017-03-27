@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'home/index'
-  post 'home/correct'
+  get 'home/correct' => "home#correct"
+  post 'home/correct' => "home#correct"
   post 'home/pass'
   get 'home/finish'
   get 'home/teamselect'

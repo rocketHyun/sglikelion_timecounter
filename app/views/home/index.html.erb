@@ -13,7 +13,8 @@
 <!-- 랜덤으로 단어가 나오도록 만들어주셈 -->
 <!-- 조건: 이미 맞춘 단어는 나오지 않게 -->
 <!-- 팀별 중복 가능 -->
-<h1>이 부분에 랜덤 단어가 나오도록</h1>
+<h1><%=@choice.content%></h1>
+
 
 
 
@@ -25,6 +26,7 @@
   <!-- hidden input안에 남은 값이 들어간다. -->
   <!-- 아래보면 jquery 구문 있음 -->
   <input type="hidden" class="timeLeft" name="timeLeft" value="">
+
   <button type="submit">정답!!</button>
 </form>
 
